@@ -1,0 +1,94 @@
+<app-titulo [titulo]="'Eventos'"></app-titulo>
+
+<div class="form-inline">
+  <div
+    class="d-flex align-items-center input-group w-auto d-inline-flex mb-2 g-3"
+  >
+    <label for="buscar" class="me-2">Filtro: </label>
+    <input
+      id="buscar"
+      type="text"
+      class="form-control w-auto"
+      placeholder="Buscar"
+      aria-label="Buscar"
+      aria-describedby="button-addon2"
+      [(ngModel)]="filtroLista"
+    />
+  </div>
+</div>
+<!-- <h3>Filtro: {{filtroLista}}</h3> -->
+<table class="table table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>
+        <button
+          class="btn btn-outline-light btn-sm"
+          (click)="isCollapsed = !isCollapsed"
+        >
+          <i class="{{ isCollapsed ? 'fa fa-eye' : 'fa fa-eye-slash' }}"></i>
+          {{ isCollapsed ? "exibir" : "ocultar" }}
+        </button>
+      </th>
+      <th>#</th>
+      <th>Tema</th>
+      <th>Local</th>
+      <th>Data</th>
+      <th>Qtd Pessoas</th>
+      <th>Lote</th>
+      <th>Opçoes</th>
+    </tr>
+  </thead>
+  <tbody *ngIf="eventos && eventos.length">
+    <tr *ngFor="let evento of eventosFiltrados">
+      <td>
+        <img
+          src="/assets/{{ evento.imagemURL }}"
+          [alt]="evento.tema"
+          [style.width.px]="widthImg"
+          [style.margin.px]="marginImg"
+          [collapse]="isCollapsed"
+          [isAnimated]="true"
+        />
+      </td>
+      <td>{{ evento.id }}</td>
+      <td>{{ evento.tema }}</td>
+      <td>{{ evento.local }}</td>
+      <td>{{ evento.dataEvento | DateTimeFormatPipe }}</td>
+      <td>{{ evento.qtdPessoas }}</td>
+      <td>{{ evento.lote[0].nome | uppercase }}</td>
+      <td>
+        <button class="btn btn-primary btn-sm me-2" tooltip="Editar">
+          <i class="fa fa-edit"></i>
+        </button>
+        <button
+          class="btn btn-danger btn-sm"
+          tooltip="Excluir"
+          (click)="openModal(template)"
+        >
+          <i class="fa fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="!eventos.length">
+    <tr>
+      <td colspan="8" class="text-center">
+        <h4>Nenhum evento encontrado!</h4>
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<!-- {{eventos | json}} -->
+
+<ng-template #template>
+  <div class="modal-body text-center">
+    <p>Tem certeza que quer deletar este evento?</p>
+    <button type="button" class="btn btn-default" (click)="confirm()">
+      Sim
+    </button>
+    <button type="button" class="btn btn-primary" (click)="decline()">
+      Não
+    </button>
+  </div>
+</ng-template>
